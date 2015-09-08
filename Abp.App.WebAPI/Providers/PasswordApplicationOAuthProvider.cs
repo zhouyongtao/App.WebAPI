@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin.Security;
+﻿using Abp.App.Core;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
@@ -27,10 +28,11 @@ namespace Abp.App.WebAPI.Providers
             context.TryGetBasicCredentials(out clientId, out clientSecret);
             if (clientId != "irving" && clientSecret != "123456")
             {
-                context.Rejected();
+                //context.Rejected();
+                context.SetError(AbpConstants.InvalidClient, AbpConstants.UnauthorizedClient);
                 return base.ValidateClientAuthentication(context);
             }
-            // need to make the client_id available for later security checks
+            //need to make the client_id available for later security checks
             context.OwinContext.Set<string>("as:client_id", clientId);
             context.Validated(clientId);
             return base.ValidateClientAuthentication(context);

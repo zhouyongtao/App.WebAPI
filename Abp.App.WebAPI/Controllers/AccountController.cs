@@ -1,45 +1,41 @@
-﻿using System;
+﻿using Abp.App.WebAPI.Models.Account;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Http;
+
 namespace Abp.App.WebAPI.Controllers
 {
     /// <summary>
     /// 账户控制器
     /// </summary>
-    public class AccountController : Controller
+    [RoutePrefix("api/v1/account")]
+    public class AccountController : ApiController
     {
-        ///// <summary>
-        ///// 测试Session
-        ///// </summary>
-        ///// <param name="model">参数</param>
-        ///// <param name="returnUrl">返回地址</param>
-        ///// <returns></returns>
-        //public async Task<ActionResult> SignIn(LoginViewModel model, string returnUrl)
-        //{
-        //    try
-        //    {
-        //        string json = model.ToJson();
-        //        Session["user"] = model;
-        //        Session["json"] = json;
-        //        return Content("success");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Content("fail");
-        //    }
-        //}
+        /// <summary>
+        /// 用户登录
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [Route("signin")]
+        public async Task<IHttpActionResult> SignInAsync(LoginViewModel lg)
+        {
+            return Ok(new { IsError = true, Msg = string.Empty, Data = string.Empty });
+        }
 
 
         /// <summary>
-        /// 设置
+        /// 用户信息
         /// </summary>
         /// <returns></returns>
-        public ActionResult Setting()
+        [Authorize]
+        [Route("info")]
+        public async Task<IHttpActionResult> InfoAsync()
         {
-            return Content("fail");
+            return Ok(new { IsError = true, Msg = string.Empty, Data = string.Empty });
         }
     }
 }
