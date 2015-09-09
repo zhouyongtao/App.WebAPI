@@ -9,7 +9,7 @@ namespace Abp.App.WebAPI.Providers
     /// <summary>
     /// Client Credentials 授权
     /// </summary>
-    public class ClientApplicationOAuthProvider : OAuthAuthorizationServerProvider
+    public class ClientAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
         /*
          private OAuth2ClientService _oauthClientService;

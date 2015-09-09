@@ -35,8 +35,8 @@ namespace Abp.App.WebAPI.App_Start
                 // /token  api/v1/account/signin
                 TokenEndpointPath = new PathString("/token"),
                 //Provider = new ClientApplicationOAuthProvider(),
-                Provider = new PasswordApplicationOAuthProvider(),
-                RefreshTokenProvider = new ApplicationRefreshTokenProvider(),
+                Provider = new PasswordAuthorizationServerProvider(),
+                RefreshTokenProvider = new RefreshAuthenticationTokenProvider(),
                 AccessTokenExpireTimeSpan = TimeSpan.FromHours(2),
                 AuthenticationMode = AuthenticationMode.Active,
                 //HTTPS is allowed only AllowInsecureHttp = false

@@ -227,9 +227,9 @@
     </Compile>
     <Compile Include="Models\Account\LoginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\ApplicationRefreshTokenProvider.cs" />
-    <Compile Include="Providers\ClientApplicationOAuthProvider.cs" />
-    <Compile Include="Providers\PasswordApplicationOAuthProvider.cs" />
+    <Compile Include="Providers\RefreshAuthenticationTokenProvider.cs" />
+    <Compile Include="Providers\ClientAuthorizationServerProvider.cs" />
+    <Compile Include="Providers\PasswordAuthorizationServerProvider.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

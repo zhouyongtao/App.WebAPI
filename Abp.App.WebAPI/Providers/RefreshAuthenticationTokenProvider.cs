@@ -12,7 +12,7 @@ namespace Abp.App.WebAPI.Providers
     /// <summary>
     /// 刷新Token
     /// </summary>
-    public class ApplicationRefreshTokenProvider : AuthenticationTokenProvider
+    public class RefreshAuthenticationTokenProvider : AuthenticationTokenProvider
     {
         private static ConcurrentDictionary<string, AuthenticationTicket> _refreshTokens = new ConcurrentDictionary<string, AuthenticationTicket>();
 

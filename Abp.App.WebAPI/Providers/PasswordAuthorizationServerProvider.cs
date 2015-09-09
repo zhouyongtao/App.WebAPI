@@ -13,7 +13,7 @@ namespace Abp.App.WebAPI.Providers
     /// <summary>
     /// Resource Owner Password Credentials Grant 授权
     /// </summary>
-    public class PasswordApplicationOAuthProvider : OAuthAuthorizationServerProvider
+    public class PasswordAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
         /// <summary>
         /// 验证客户端[Authorization Basic Base64(username:password)]
