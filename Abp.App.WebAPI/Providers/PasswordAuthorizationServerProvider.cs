@@ -20,10 +20,16 @@ namespace Abp.App.WebAPI.Providers
         /// Password Grant 授权服务
         /// </summary>
         private readonly IClientAuthorizationProviderService _clientAuthorizationProviderService;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="clientAuthorizationProviderService">Password Grant 授权服务</param>
         public PasswordAuthorizationServerProvider(IClientAuthorizationProviderService clientAuthorizationProviderService)
         {
             _clientAuthorizationProviderService = clientAuthorizationProviderService;
         }
+
         /// <summary>
         /// 验证客户端[Authorization Basic Base64(clientId:clientSecret)]
         /// </summary>
