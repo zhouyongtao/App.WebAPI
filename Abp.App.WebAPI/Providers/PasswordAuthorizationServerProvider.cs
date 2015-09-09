@@ -1,4 +1,5 @@
 ﻿using Abp.App.Core;
+using Abp.App.Services;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using System;
@@ -16,26 +17,34 @@ namespace Abp.App.WebAPI.Providers
     public class PasswordAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
         /// <summary>
-        /// 验证客户端[Authorization Basic Base64(username:password)]
+        /// Password Grant 授权服务
+        /// </summary>
+        private readonly IClientAuthorizationProviderService _clientAuthorizationProviderService;
+        public PasswordAuthorizationServerProvider(IClientAuthorizationProviderService clientAuthorizationProviderService)
+        {
+            _clientAuthorizationProviderService = clientAuthorizationProviderService;
+        }
+        /// <summary>
+        /// 验证客户端[Authorization Basic Base64(clientId:clientSecret)]
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
+        public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
-            // validate client credentials (demo) should be stored securely (salted, hashed, iterated)
+            //validate client credentials (demo) should be stored securely (salted, hashed, iterated)
             string clientId;
             string clientSecret;
             context.TryGetBasicCredentials(out clientId, out clientSecret);
-            if (clientId != "irving" && clientSecret != "123456")
+            var clientValidate = await _clientAuthorizationProviderService.ValidateClientAuthorizationSecret(clientId, clientSecret);
+            if (!clientValidate)
             {
                 //context.Rejected();
                 context.SetError(AbpConstants.InvalidClient, AbpConstants.UnauthorizedClient);
-                return base.ValidateClientAuthentication(context);
             }
             //need to make the client_id available for later security checks
             context.OwinContext.Set<string>("as:client_id", clientId);
+            //context.OwinContext.Set<string>("as:clientRefreshTokenLifeTime", _clientAuthorizationProviderService.RefreshTokenLifeTime.ToString());
             context.Validated(clientId);
-            return base.ValidateClientAuthentication(context);
         }
 
 

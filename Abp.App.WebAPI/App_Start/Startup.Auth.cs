@@ -1,4 +1,5 @@
-﻿using Abp.App.WebAPI.Providers;
+﻿using Abp.App.Services.Impl;
+using Abp.App.WebAPI.Providers;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
@@ -35,7 +36,7 @@ namespace Abp.App.WebAPI.App_Start
                 // /token  api/v1/account/signin
                 TokenEndpointPath = new PathString("/token"),
                 //Provider = new ClientApplicationOAuthProvider(),
-                Provider = new PasswordAuthorizationServerProvider(),
+                Provider = new PasswordAuthorizationServerProvider(new ClientAuthorizationProviderService()),
                 RefreshTokenProvider = new RefreshAuthenticationTokenProvider(),
                 AccessTokenExpireTimeSpan = TimeSpan.FromHours(2),
                 AuthenticationMode = AuthenticationMode.Active,

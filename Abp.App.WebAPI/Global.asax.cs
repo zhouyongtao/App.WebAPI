@@ -19,7 +19,7 @@ namespace Abp.App.WebAPI
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            AutofacConfig.RegisterDependency();
+            DependencyInjectionConfig.Register();
         }
     }
 }

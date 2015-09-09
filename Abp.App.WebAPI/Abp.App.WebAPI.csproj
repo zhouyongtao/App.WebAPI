@@ -185,7 +185,7 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\AutofacConfig.cs" />
+    <Compile Include="App_Start\DependencyInjectionConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -302,6 +302,10 @@
     <ProjectReference Include="..\Abp.App.Core\Abp.App.Core.csproj">
       <Project>{7656adcf-c2b1-4b6a-ba77-f4f0f9544109}</Project>
       <Name>Abp.App.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Abp.App.Services\Abp.App.Services.csproj">
+      <Project>{9c693fd2-165f-426f-b164-40df5e264945}</Project>
+      <Name>Abp.App.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
