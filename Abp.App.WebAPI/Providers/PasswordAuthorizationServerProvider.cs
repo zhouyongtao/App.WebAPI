@@ -31,7 +31,7 @@ namespace Abp.App.WebAPI.Providers
         }
 
         /// <summary>
-        /// 验证客户端[Authorization Basic Base64(clientId:clientSecret)]
+        /// 验证客户端 [Authorization Basic Base64(clientId:clientSecret)]
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
@@ -54,9 +54,8 @@ namespace Abp.App.WebAPI.Providers
             context.Validated(clientId);
         }
 
-
         /// <summary>
-        ///  验证Resource Owner Password Credentials Grant[username与password]
+        ///  验证用户名与密码 Resource Owner Password Credentials Grant[username与password]
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
@@ -85,7 +84,7 @@ namespace Abp.App.WebAPI.Providers
         }
 
         /// <summary>
-        /// 刷新Token[刷新refresh_token]
+        /// 刷新Token [刷新refresh_token]
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>

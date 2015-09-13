@@ -12,6 +12,12 @@ namespace Abp.App.Repositories.Impl
 {
     public class ClientAuthorizationRepository : IClientAuthorizationRepository
     {
+        /// <summary>
+        /// 验证客户端[Authorization Basic Base64(clientId:clientSecret)]
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <param name="clientSecret"></param>
+        /// <returns></returns>
         public async Task<bool> ValidateClientAuthorizationSecret(string clientId, string clientSecret)
         {
             const string cmdText = @"SELECT COUNT(*) FROM [dbo].[app_client] WHERE clientId=@clientId AND clientSecret=@clientSecret";
