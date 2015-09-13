@@ -20,7 +20,7 @@ namespace Abp.App.Repositories.Impl
         /// <returns></returns>
         public async Task<bool> ValidateClientAuthorizationSecret(string clientId, string clientSecret)
         {
-            const string cmdText = @"SELECT COUNT(*) FROM [dbo].[app_client] WHERE clientId=@clientId AND clientSecret=@clientSecret";
+            const string cmdText = @"SELECT COUNT(*) FROM [dbo].[clients] WHERE clientId=@clientId AND clientSecret=@clientSecret";
             try
             {
                 return await new SqlConnection(DbSetting.App).ExecuteScalarAsync<int>(cmdText, new { clientId = clientId, clientSecret = clientSecret }) != 0;

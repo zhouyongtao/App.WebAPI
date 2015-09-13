@@ -44,7 +44,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IUserService.cs" />
     <Compile Include="IClientAuthorizationService.cs" />
+    <Compile Include="Impl\UserService.cs" />
     <Compile Include="Impl\ClientAuthorizationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

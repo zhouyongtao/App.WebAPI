@@ -22,12 +22,20 @@ namespace Abp.App.WebAPI.Providers
         private readonly IClientAuthorizationService _clientAuthorizationService;
 
         /// <summary>
+        /// 用户服务
+        /// </summary>
+        private readonly IUserService _userService;
+
+
+        /// <summary>
         /// 构造函数
         /// </summary>
-        /// <param name="clientAuthorizationProviderService">Password Grant 授权服务</param>
-        public PasswordAuthorizationServerProvider(IClientAuthorizationService clientAuthorizationService)
+        /// <param name="clientAuthorizationService">Password Grant 授权服务</param>
+        /// <param name="userService">用户服务</param>
+        public PasswordAuthorizationServerProvider(IClientAuthorizationService clientAuthorizationService, IUserService userService)
         {
             _clientAuthorizationService = clientAuthorizationService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -41,8 +49,8 @@ namespace Abp.App.WebAPI.Providers
             string clientId;
             string clientSecret;
             context.TryGetBasicCredentials(out clientId, out clientSecret);
-            var clietnValid = await _clientAuthorizationService.ValidateClientAuthorizationSecret(clientId, clientSecret);
-            if (!clietnValid)
+            var clientValid = await _clientAuthorizationService.ValidateClientAuthorizationSecret(clientId, clientSecret);
+            if (!clientValid)
             {
                 //context.Rejected();
                 context.SetError(AbpConstants.InvalidClient, AbpConstants.UnauthorizedClient);
@@ -59,15 +67,14 @@ namespace Abp.App.WebAPI.Providers
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
+        public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            //var user = userService.Query(context.UserName, context.Password);
-            //validate user credentials (验证用户名与密码)  should be stored securely (salted, hashed, iterated)       
-            //var user = userService.Query(context.UserName, context.Password);
-            if (context.UserName != "irving" && context.Password != "123456")
+            //validate user credentials (验证用户名与密码)  should be stored securely (salted, hashed, iterated) 
+            var userValid = await _userService.ValidateUserNameAuthorizationPwd(context.UserName, context.Password);
+            if (!userValid)
             {
                 context.Rejected();
-                return base.GrantResourceOwnerCredentials(context);
+                return;
             }
             //create identity
             var claimsIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
@@ -80,7 +87,6 @@ namespace Abp.App.WebAPI.Providers
                             });
             var ticket = new AuthenticationTicket(claimsIdentity, props);
             context.Validated(ticket);
-            return base.GrantResourceOwnerCredentials(context);
         }
 
         /// <summary>

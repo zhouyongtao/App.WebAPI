@@ -35,5 +35,6 @@ namespace Abp.App.Services.Impl
                 return false;
             return await _clientAuthorizationRepository.ValidateClientAuthorizationSecret(clientId, clientSecret);
         }
+
     }
 }

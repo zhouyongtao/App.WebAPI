@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Impl\UserRepository.cs" />
+    <Compile Include="IUserRepository.cs" />
     <Compile Include="IClientAuthorizationRepository.cs" />
     <Compile Include="Impl\ClientAuthorizationRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
