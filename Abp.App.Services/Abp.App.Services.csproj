@@ -55,6 +55,10 @@
       <Project>{ba64adc1-b92f-462f-8eb8-36d9d998c5fe}</Project>
       <Name>Abp.App.Repositories</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Apb.App.Entities\Apb.App.Entities.csproj">
+      <Project>{a2aecc41-91ed-4da0-b74e-a17c2a534395}</Project>
+      <Name>Apb.App.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

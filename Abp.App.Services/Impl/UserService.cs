@@ -29,11 +29,11 @@ namespace Abp.App.Services.Impl
         /// <param name="userName">用户名</param>
         /// <param name="pwd">密码</param>
         /// <returns></returns>
-        public async Task<bool> ValidateUserNameAuthorizationPwd(string userName, string pwd)
+        public async Task<bool> ValidateUserNameAuthorizationPwdAsync(string userName, string pwd)
         {
             if (userName.IsNullOrEmpty() || pwd.IsNullOrEmpty())
                 return false;
-            return await _userRepository.ValidateUserNameAuthorizationPwd(userName, pwd);
+            return await _userRepository.ValidateUserNameAuthorizationPwdAsync(userName, pwd);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Apb.App.Entities.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,13 @@ namespace Abp.App.Services
         /// <param name="clientId"></param>
         /// <param name="clientSecret"></param>
         /// <returns></returns>
-        Task<bool> ValidateClientAuthorizationSecret(string clientId, string clientSecret);
+        Task<bool> ValidateClientAuthorizationSecretAsync(string clientId, string clientSecret);
+
+        /// <summary>
+        /// 保持票据
+        /// </summary>
+        /// <param name="token">票据</param>
+        /// <returns></returns>
+        Task<bool> SaveTokenAsync(Token token);
     }
 }

@@ -2,12 +2,9 @@
 using Abp.App.Services;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Abp.App.WebAPI.Providers
 {
@@ -48,7 +45,7 @@ namespace Abp.App.WebAPI.Providers
             string clientId;
             string clientSecret;
             context.TryGetBasicCredentials(out clientId, out clientSecret);
-            var clientValid = await _clientAuthorizationService.ValidateClientAuthorizationSecret(clientId, clientSecret);
+            var clientValid = await _clientAuthorizationService.ValidateClientAuthorizationSecretAsync(clientId, clientSecret);
             if (!clientValid)
             {
                 //context.Rejected();
@@ -69,15 +66,20 @@ namespace Abp.App.WebAPI.Providers
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
             //validate user credentials (验证用户名与密码)  should be stored securely (salted, hashed, iterated) 
-            var userValid = await _userService.ValidateUserNameAuthorizationPwd(context.UserName, context.Password);
+            var userValid = await _userService.ValidateUserNameAuthorizationPwdAsync(context.UserName, context.Password);
             if (!userValid)
             {
                 //context.Rejected();
                 context.SetError(AbpConstants.InvalidUser, AbpConstants.UnauthorizedUser);
                 return;
             }
+            var oAuthIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
+            oAuthIdentity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+            context.Validated(oAuthIdentity);
+            /*
             //create identity
             var claimsIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
             claimsIdentity.AddClaim(new Claim("sub", context.UserName));
             claimsIdentity.AddClaim(new Claim("role", "user"));
             // create metadata to pass on to refresh token provider
@@ -87,16 +89,17 @@ namespace Abp.App.WebAPI.Providers
                             });
             var ticket = new AuthenticationTicket(claimsIdentity, props);
             context.Validated(ticket);
+            */
         }
 
         /// <summary>
-        /// 刷新Token [刷新refresh_token]
+        /// 验证持有 refresh token 的客户端
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
         public override Task GrantRefreshToken(OAuthGrantRefreshTokenContext context)
         {
-            if (context.Ticket == null || context.Ticket.Identity == null || !context.Ticket.Identity.IsAuthenticated)
+            if (context.Ticket == null || context.Ticket.Identity == null)
             {
                 context.Rejected();
                 return base.GrantRefreshToken(context);
@@ -110,9 +113,12 @@ namespace Abp.App.WebAPI.Providers
                 return base.GrantRefreshToken(context);
             }
             // chance to change authentication ticket for refresh token requests
-            var newId = new ClaimsIdentity(context.Ticket.Identity);
-            newId.AddClaim(new Claim("newClaim", "refreshToken"));
-            var newTicket = new AuthenticationTicket(newId, context.Ticket.Properties);
+            var claimsIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
+            var props = new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    { "as:client_id", context.ClientId }
+                });
+            var newTicket = new AuthenticationTicket(claimsIdentity, props);
             context.Validated(newTicket);
             return base.GrantRefreshToken(context);
         }

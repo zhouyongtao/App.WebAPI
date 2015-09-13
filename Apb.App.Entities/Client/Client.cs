@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Apb.App.Entities.Client
 {
-    public class AppClient
+    public class Client
     {
         public int Id { get; set; }
         public string ClientId { get; set; }

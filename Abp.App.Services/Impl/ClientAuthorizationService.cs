@@ -1,4 +1,5 @@
 ﻿using Abp.App.Repositories;
+using Apb.App.Entities.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,12 +30,21 @@ namespace Abp.App.Services.Impl
         /// <param name="clientId"></param>
         /// <param name="clientSecret"></param>
         /// <returns></returns>
-        public async Task<bool> ValidateClientAuthorizationSecret(string clientId, string clientSecret)
+        public async Task<bool> ValidateClientAuthorizationSecretAsync(string clientId, string clientSecret)
         {
             if (clientId.IsNullOrEmpty() || clientSecret.IsNullOrEmpty())
                 return false;
-            return await _clientAuthorizationRepository.ValidateClientAuthorizationSecret(clientId, clientSecret);
+            return await _clientAuthorizationRepository.ValidateClientAuthorizationSecretAsync(clientId, clientSecret);
         }
 
+        /// <summary>
+        /// 保持票据
+        /// </summary>
+        /// <param name="token">票据</param>
+        /// <returns></returns>
+        public async Task<bool> SaveTokenAsync(Token token)
+        {
+            return await _clientAuthorizationRepository.SaveTokenAsync(token);
+        }
     }
 }

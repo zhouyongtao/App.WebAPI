@@ -309,6 +309,10 @@
       <Project>{9c693fd2-165f-426f-b164-40df5e264945}</Project>
       <Name>Abp.App.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Apb.App.Entities\Apb.App.Entities.csproj">
+      <Project>{a2aecc41-91ed-4da0-b74e-a17c2a534395}</Project>
+      <Name>Apb.App.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -43,7 +43,7 @@ namespace Abp.App.WebAPI.App_Start
                 //Provider = DependencyInjectionConfig.container.Resolve<PasswordAuthorizationServerProvider>(),
                 //Provider = DependencyResolver.Current.GetService<PasswordAuthorizationServerProvider>(),
                 Provider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<PasswordAuthorizationServerProvider>(),
-                RefreshTokenProvider = new RefreshAuthenticationTokenProvider(),
+                RefreshTokenProvider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<RefreshAuthenticationTokenProvider>(),
                 AccessTokenExpireTimeSpan = TimeSpan.FromHours(2),
                 AuthenticationMode = AuthenticationMode.Active,
                 //HTTPS is allowed only AllowInsecureHttp = false

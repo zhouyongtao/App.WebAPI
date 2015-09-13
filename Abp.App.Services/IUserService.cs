@@ -14,6 +14,6 @@ namespace Abp.App.Services
         /// <param name="userName">用户名</param>
         /// <param name="pwd">密码</param>
         /// <returns></returns>
-        Task<bool> ValidateUserNameAuthorizationPwd(string userName, string pwd);
+        Task<bool> ValidateUserNameAuthorizationPwdAsync(string userName, string pwd);
     }
 }

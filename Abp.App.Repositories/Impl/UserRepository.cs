@@ -18,7 +18,7 @@ namespace Abp.App.Repositories.Impl
         /// <param name="userName">用户名</param>
         /// <param name="pwd">密码</param>
         /// <returns></returns>
-        public async Task<bool> ValidateUserNameAuthorizationPwd(string userName, string pwd)
+        public async Task<bool> ValidateUserNameAuthorizationPwdAsync(string userName, string pwd)
         {
             const string cmdText = @"SELECT COUNT(*) FROM [dbo].[users] WHERE username=@username AND pwd=@pwd";
             try
