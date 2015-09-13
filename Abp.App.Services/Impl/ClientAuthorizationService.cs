@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace Abp.App.Services.Impl
 {
-    public class ClientAuthorizationProviderService : IClientAuthorizationProviderService
+    public class ClientAuthorizationService : IClientAuthorizationService
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <param name="clientSecret"></param>
+        /// <returns></returns>
         public async Task<bool> ValidateClientAuthorizationSecret(string clientId, string clientSecret)
         {
             return true;

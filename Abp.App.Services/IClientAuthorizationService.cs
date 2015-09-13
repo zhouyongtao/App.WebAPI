@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Abp.App.Services
 {
-    public interface IClientAuthorizationProviderService
+    public interface IClientAuthorizationService
     {
         Task<bool> ValidateClientAuthorizationSecret(string clientId, string clientSecret);
     }
