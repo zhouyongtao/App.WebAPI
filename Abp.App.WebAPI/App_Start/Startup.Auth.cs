@@ -1,10 +1,13 @@
-﻿using Abp.App.Services.Impl;
-using Abp.App.WebAPI.Providers;
+﻿using Abp.App.WebAPI.Providers;
+using Autofac;
+using Autofac.Integration.WebApi;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 using System;
+using System.Web.Http;
+using System.Web.Mvc;
 
 namespace Abp.App.WebAPI.App_Start
 {
@@ -36,7 +39,10 @@ namespace Abp.App.WebAPI.App_Start
                 // /token  api/v1/account/signin
                 TokenEndpointPath = new PathString("/token"),
                 //Provider = new ClientApplicationOAuthProvider(),
-                Provider = new PasswordAuthorizationServerProvider(new ClientAuthorizationService()),
+                //Provider = new PasswordAuthorizationServerProvider(),
+                //Provider = DependencyInjectionConfig.container.Resolve<PasswordAuthorizationServerProvider>(),
+                //Provider = DependencyResolver.Current.GetService<PasswordAuthorizationServerProvider>(),
+                Provider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<PasswordAuthorizationServerProvider>(),
                 RefreshTokenProvider = new RefreshAuthenticationTokenProvider(),
                 AccessTokenExpireTimeSpan = TimeSpan.FromHours(2),
                 AuthenticationMode = AuthenticationMode.Active,

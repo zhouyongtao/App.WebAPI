@@ -14,11 +14,10 @@ namespace Abp.App.Repositories.Impl
     {
         public async Task<bool> ValidateClientAuthorizationSecret(string clientId, string clientSecret)
         {
-            const string cmdText = @"SELECT *FROM [dbo].[app_client] WHERE clientId=@clientId AND clientSecret=@clientSecret";
+            const string cmdText = @"SELECT COUNT(*) FROM [dbo].[app_client] WHERE clientId=@clientId AND clientSecret=@clientSecret";
             try
             {
-                var client = await new SqlConnection(DbSetting.App).QueryAsync<AppClient>(cmdText, new { clientId = clientId, clientSecret = clientSecret }).ContinueWith(t => t.Result.SingleOrDefault());
-                return client != null;
+                return await new SqlConnection(DbSetting.App).ExecuteScalarAsync<int>(cmdText, new { clientId = clientId, clientSecret = clientSecret }) != 0;
             }
             catch (Exception ex)
             {

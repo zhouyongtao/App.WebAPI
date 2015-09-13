@@ -19,15 +19,15 @@ namespace Abp.App.WebAPI.Providers
         /// <summary>
         /// Password Grant 授权服务
         /// </summary>
-        private readonly IClientAuthorizationService _clientAuthorizationProviderService;
+        private readonly IClientAuthorizationService _clientAuthorizationService;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="clientAuthorizationProviderService">Password Grant 授权服务</param>
-        public PasswordAuthorizationServerProvider(IClientAuthorizationService clientAuthorizationProviderService)
+        public PasswordAuthorizationServerProvider(IClientAuthorizationService clientAuthorizationService)
         {
-            _clientAuthorizationProviderService = clientAuthorizationProviderService;
+            _clientAuthorizationService = clientAuthorizationService;
         }
 
         /// <summary>
@@ -41,11 +41,12 @@ namespace Abp.App.WebAPI.Providers
             string clientId;
             string clientSecret;
             context.TryGetBasicCredentials(out clientId, out clientSecret);
-            var clientValid = await _clientAuthorizationProviderService.ValidateClientAuthorizationSecret(clientId, clientSecret);
-            if (!clientValid)
+            var clietnValid = await _clientAuthorizationService.ValidateClientAuthorizationSecret(clientId, clientSecret);
+            if (!clietnValid)
             {
                 //context.Rejected();
                 context.SetError(AbpConstants.InvalidClient, AbpConstants.UnauthorizedClient);
+                return;
             }
             //need to make the client_id available for later security checks
             context.OwinContext.Set<string>("as:client_id", clientId);
