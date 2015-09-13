@@ -44,10 +44,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IClientAuthorizationRepository.cs" />
+    <Compile Include="Impl\ClientAuthorizationRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Abp.App.Core\Abp.App.Core.csproj">
+      <Project>{7656adcf-c2b1-4b6a-ba77-f4f0f9544109}</Project>
+      <Name>Abp.App.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Apb.App.Entities\Apb.App.Entities.csproj">
+      <Project>{a2aecc41-91ed-4da0-b74e-a17c2a534395}</Project>
+      <Name>Apb.App.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
