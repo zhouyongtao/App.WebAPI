@@ -26,7 +26,6 @@ namespace Abp.App.WebAPI.Providers
         /// </summary>
         private readonly IUserService _userService;
 
-
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -39,7 +38,7 @@ namespace Abp.App.WebAPI.Providers
         }
 
         /// <summary>
-        /// 验证客户端 [Authorization Basic Base64(clientId:clientSecret)]
+        /// 验证客户端 [Authorization Basic Base64(clientId:clientSecret)|Authorization: Basic 5zsd8ewF0MqapsWmDwFmQmeF0Mf2gJkW]
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
@@ -63,7 +62,7 @@ namespace Abp.App.WebAPI.Providers
         }
 
         /// <summary>
-        ///  验证用户名与密码 Resource Owner Password Credentials Grant[username与password]
+        ///  验证用户名与密码 [Resource Owner Password Credentials Grant[username与password]|grant_type=password&username=irving&password=654321]
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
