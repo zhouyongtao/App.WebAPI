@@ -37,12 +37,12 @@ namespace Abp.App.WebAPI.Providers
         /// <returns></returns>
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
-            //validate client credentials (demo) should be stored securely (salted, hashed, iterated)
+            //validate client credentials should be stored securely (salted, hashed, iterated)
             string clientId;
             string clientSecret;
             context.TryGetBasicCredentials(out clientId, out clientSecret);
-            var clientValidate = await _clientAuthorizationProviderService.ValidateClientAuthorizationSecret(clientId, clientSecret);
-            if (!clientValidate)
+            var clientValid = await _clientAuthorizationProviderService.ValidateClientAuthorizationSecret(clientId, clientSecret);
+            if (!clientValid)
             {
                 //context.Rejected();
                 context.SetError(AbpConstants.InvalidClient, AbpConstants.UnauthorizedClient);
