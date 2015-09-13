@@ -32,5 +32,9 @@ namespace Abp.App.Core
         public const string UnsupportedResponseType = "unsupported_response_type";
         public const string UnsupportedGrantType = "unsupported_grant_type";
         public const string UnauthorizedClient = "unauthorized_client";
+
+
+        public const string InvalidUser = "invalid_user";
+        public const string UnauthorizedUser= "unauthorized_user";
     }
 }

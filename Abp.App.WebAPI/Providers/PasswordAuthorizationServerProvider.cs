@@ -72,7 +72,8 @@ namespace Abp.App.WebAPI.Providers
             var userValid = await _userService.ValidateUserNameAuthorizationPwd(context.UserName, context.Password);
             if (!userValid)
             {
-                context.Rejected();
+                //context.Rejected();
+                context.SetError(AbpConstants.InvalidUser, AbpConstants.UnauthorizedUser);
                 return;
             }
             //create identity
