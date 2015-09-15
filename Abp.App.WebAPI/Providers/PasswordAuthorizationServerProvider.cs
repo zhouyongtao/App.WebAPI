@@ -49,7 +49,7 @@ namespace Abp.App.WebAPI.Providers
             if (!clientValid)
             {
                 //context.Rejected();
-                context.SetError(AbpConstants.InvalidClient, AbpConstants.UnauthorizedClient);
+                context.SetError(AbpConstants.InvalidClient, AbpConstants.InvalidClientErrorDescription);
                 return;
             }
             //need to make the client_id available for later security checks
@@ -70,12 +70,13 @@ namespace Abp.App.WebAPI.Providers
             if (!userValid)
             {
                 //context.Rejected();
-                context.SetError(AbpConstants.InvalidUser, AbpConstants.UnauthorizedUser);
+                context.SetError(AbpConstants.AccessDenied, AbpConstants.AccessDeniedErrorDescription);
                 return;
             }
-            var oAuthIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
-            oAuthIdentity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
-            context.Validated(oAuthIdentity);
+            var claimsIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+            var ticket = new AuthenticationTicket(claimsIdentity, new AuthenticationProperties());
+            context.Validated(ticket);
             /*
             //create identity
             var claimsIdentity = new ClaimsIdentity(context.Options.AuthenticationType);

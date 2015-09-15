@@ -47,7 +47,9 @@ namespace Abp.App.WebAPI.App_Start
                 AccessTokenExpireTimeSpan = TimeSpan.FromHours(2),
                 AuthenticationMode = AuthenticationMode.Active,
                 //HTTPS is allowed only AllowInsecureHttp = false
-                AllowInsecureHttp = true
+#if DEBUG
+                AllowInsecureHttp = true,
+#endif
             });
         }
     }
