@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace Abp.App.Services.Impl
 {
-    public class UserService : IUserService
+    public class AccountService : IAccountService
     {
         /// <summary>
         /// 用户仓库服务
         /// </summary>
-        private readonly IUserRepository _userRepository;
+        private readonly IAccountRepository _userRepository;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="userRepository"></param>
-        public UserService(IUserRepository userRepository)
+        public AccountService(IAccountRepository userRepository)
         {
             _userRepository = userRepository;
         }

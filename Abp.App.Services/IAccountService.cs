@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Abp.App.Services
 {
-    public interface IUserService
+    public interface IAccountService
     {
         /// <summary>
         /// 验证用户名密码

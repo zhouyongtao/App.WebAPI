@@ -21,17 +21,17 @@ namespace Abp.App.WebAPI.Providers
         /// <summary>
         /// 用户服务
         /// </summary>
-        private readonly IUserService _userService;
+        private readonly IAccountService _accountService;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="clientAuthorizationService">Password Grant 授权服务</param>
         /// <param name="userService">用户服务</param>
-        public PasswordAuthorizationServerProvider(IClientAuthorizationService clientAuthorizationService, IUserService userService)
+        public PasswordAuthorizationServerProvider(IClientAuthorizationService clientAuthorizationService, IAccountService userService)
         {
             _clientAuthorizationService = clientAuthorizationService;
-            _userService = userService;
+            _accountService = userService;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Abp.App.WebAPI.Providers
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
             //validate user credentials (验证用户名与密码)  should be stored securely (salted, hashed, iterated) 
-            var userValid = await _userService.ValidateUserNameAuthorizationPwdAsync(context.UserName, context.Password);
+            var userValid = await _accountService.ValidateUserNameAuthorizationPwdAsync(context.UserName, context.Password);
             if (!userValid)
             {
                 //context.Rejected();

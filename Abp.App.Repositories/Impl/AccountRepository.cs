@@ -10,7 +10,7 @@ using Apb.App.Entities.Client;
 
 namespace Abp.App.Repositories.Impl
 {
-    public class UserRepository : IUserRepository
+    public class AccountRepository : IAccountRepository
     {
         /// <summary>
         /// 验证用户名密码

@@ -26,7 +26,6 @@ namespace Abp.App.WebAPI.Controllers
             return Ok(new { IsError = true, Msg = string.Empty, Data = string.Empty });
         }
 
-
         /// <summary>
         /// 用户信息
         /// </summary>
