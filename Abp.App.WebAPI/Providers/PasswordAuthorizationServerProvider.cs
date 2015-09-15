@@ -19,7 +19,7 @@ namespace Abp.App.WebAPI.Providers
         private readonly IClientAuthorizationService _clientAuthorizationService;
 
         /// <summary>
-        /// 用户服务
+        ///账户服务
         /// </summary>
         private readonly IAccountService _accountService;
 
@@ -27,11 +27,11 @@ namespace Abp.App.WebAPI.Providers
         /// 构造函数
         /// </summary>
         /// <param name="clientAuthorizationService">Password Grant 授权服务</param>
-        /// <param name="userService">用户服务</param>
-        public PasswordAuthorizationServerProvider(IClientAuthorizationService clientAuthorizationService, IAccountService userService)
+        /// <param name="accountService">用户服务</param>
+        public PasswordAuthorizationServerProvider(IClientAuthorizationService clientAuthorizationService, IAccountService accountService)
         {
             _clientAuthorizationService = clientAuthorizationService;
-            _accountService = userService;
+            _accountService = accountService;
         }
 
         /// <summary>
