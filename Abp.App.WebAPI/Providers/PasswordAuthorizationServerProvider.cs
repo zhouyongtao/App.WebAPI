@@ -65,6 +65,7 @@ namespace Abp.App.WebAPI.Providers
         /// <returns></returns>
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
+            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
             //validate user credentials (验证用户名与密码)  should be stored securely (salted, hashed, iterated) 
             var userValid = await _accountService.ValidateUserNameAuthorizationPwdAsync(context.UserName, context.Password);
             if (!userValid)

@@ -36,5 +36,20 @@ namespace Abp.App.WebAPI.Controllers
         {
             return Ok(new { IsError = true, Msg = string.Empty, Data = string.Empty });
         }
+
+
+        [Authorize]
+        [HttpGet]
+        [Route("api/account/profile")]
+        public HttpResponseMessage Profile()
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ObjectContent<object>(new
+                {
+                    UserName = User.Identity.Name
+                }, Configuration.Formatters.JsonFormatter)
+            };
+        }
     }
 }

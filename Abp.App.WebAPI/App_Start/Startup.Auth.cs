@@ -36,6 +36,7 @@ namespace Abp.App.WebAPI.App_Start
 
             app.UseOAuthBearerTokens(new OAuthAuthorizationServerOptions
             {
+               // AccessTokenProvider=
                 // /token  api/v1/account/signin
                 TokenEndpointPath = new PathString("/token"),
                 //Provider = new ClientApplicationOAuthProvider(),
