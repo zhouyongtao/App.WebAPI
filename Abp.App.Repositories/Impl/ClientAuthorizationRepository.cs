@@ -8,11 +8,31 @@ using Dapper.Contrib.Extensions;
 using System.Data.SqlClient;
 using Abp.App.Core;
 using Apb.App.Entities.Client;
+using System.Security.Cryptography;
 
 namespace Abp.App.Repositories.Impl
 {
     public class ClientAuthorizationRepository : IClientAuthorizationRepository
     {
+        /// <summary>
+        /// 生成OAuth2 clientSecret
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GenerateOAuthClientSecretAsync(string client_id = "")
+        {
+            //！！！ http://stackoverflow.com/questions/23652166/how-to-generate-oauth-2-client-id-and-secret
+            return await Task.Run(() =>
+            {
+                var cryptoRandomDataGenerator = new RNGCryptoServiceProvider();
+                byte[] buffer = Guid.NewGuid().ToByteArray();
+                if (client_id.IsNotNullOrEmpty())
+                {
+                    buffer = client_id.ToByteArray();
+                }
+                cryptoRandomDataGenerator.GetBytes(buffer);
+                return Convert.ToBase64String(buffer).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+            });
+        }
 
         /// <summary>
         /// 验证客户端[Authorization Basic Base64(clientId:clientSecret)]
@@ -20,12 +40,12 @@ namespace Abp.App.Repositories.Impl
         /// <param name="clientId"></param>
         /// <param name="clientSecret"></param>
         /// <returns></returns>
-        public async Task<bool> ValidateClientAuthorizationSecretAsync(string clientId, string clientSecret)
+        public async Task<bool> ValidateClientAuthorizationSecretAsync(string client_id, string client_secret)
         {
-            const string cmdText = @"SELECT COUNT(*) FROM [dbo].[clients] WHERE clientId=@clientId AND clientSecret=@clientSecret";
+            const string cmdText = @"SELECT COUNT(*) FROM [dbo].[clients] WHERE client_id=@clientId AND client_secret=@clientSecret";
             try
             {
-                return await new SqlConnection(DbSetting.App).ExecuteScalarAsync<int>(cmdText, new { clientId = clientId, clientSecret = clientSecret }) != 0;
+                return await new SqlConnection(DbSetting.App).ExecuteScalarAsync<int>(cmdText, new { clientId = client_id, clientSecret = client_secret }) != 0;
             }
             catch (Exception ex)
             {

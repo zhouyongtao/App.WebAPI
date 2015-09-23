@@ -34,7 +34,7 @@ namespace Abp.App.WebAPI.Controllers
         [Route("info")]
         public async Task<IHttpActionResult> InfoAsync()
         {
-            return Ok(new { IsError = true, Msg = string.Empty, Data = string.Empty });
+            return Ok(new { IsError = true, Msg = "irving", Data = string.Empty });
         }
 
 

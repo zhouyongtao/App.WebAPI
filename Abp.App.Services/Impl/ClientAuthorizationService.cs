@@ -25,16 +25,25 @@ namespace Abp.App.Services.Impl
         }
 
         /// <summary>
+        /// 生成OAuth2 clientSecret
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GenerateOAuthClientSecretAsync(string client_id = "")
+        {
+            return await _clientAuthorizationRepository.GenerateOAuthClientSecretAsync(client_id);
+        }
+
+        /// <summary>
         /// 验证客户端[Authorization Basic Base64(clientId:clientSecret)]
         /// </summary>
         /// <param name="clientId"></param>
         /// <param name="clientSecret"></param>
         /// <returns></returns>
-        public async Task<bool> ValidateClientAuthorizationSecretAsync(string clientId, string clientSecret)
+        public async Task<bool> ValidateClientAuthorizationSecretAsync(string client_id, string client_secret)
         {
-            if (clientId.IsNullOrEmpty() || clientSecret.IsNullOrEmpty())
+            if (client_id.IsNullOrEmpty() || client_secret.IsNullOrEmpty())
                 return false;
-            return await _clientAuthorizationRepository.ValidateClientAuthorizationSecretAsync(clientId, clientSecret);
+            return await _clientAuthorizationRepository.ValidateClientAuthorizationSecretAsync(client_id, client_secret);
         }
 
         /// <summary>
