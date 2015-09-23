@@ -41,8 +41,6 @@ namespace Abp.App.WebAPI.Providers
         /// <returns></returns>
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
-            //var generateClientSecret = await _clientAuthorizationService.GenerateOAuthClientSecretAsync();
-            
             //validate client credentials should be stored securely (salted, hashed, iterated)
             string clientId;
             string clientSecret;

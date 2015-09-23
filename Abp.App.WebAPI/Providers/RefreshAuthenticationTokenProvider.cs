@@ -58,7 +58,8 @@ namespace Abp.App.WebAPI.Providers
             context.Ticket.Properties.IssuedUtc = token.IssuedUtc;
             context.Ticket.Properties.ExpiresUtc = token.ExpiresUtc;
             token.Access_token = context.SerializeTicket();
-            token.Refresh_token = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+            token.Refresh_token = await _clientAuthorizationService.GenerateOAuthClientSecretAsync();
+            //token.Refresh_token = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).TrimEnd('=').Replace('+', '-').Replace('/', '_');
             if (await _clientAuthorizationService.SaveTokenAsync(token))
             {
                 context.SetToken(token.Refresh_token);

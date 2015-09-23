@@ -235,7 +235,7 @@
     <Content Include="App_Data\App_log.ldf">
       <DependentUpon>App.mdf</DependentUpon>
     </Content>
-    <Content Include="App_Data\DbSQL.sql" />
+    <Content Include="App_Data\dbschema.sql" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
