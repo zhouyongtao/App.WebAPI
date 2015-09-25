@@ -88,17 +88,17 @@ namespace Abp.App.WebAPI.Providers
             var token = await _clientAuthorizationService.GetTokenAsync(context.Token);
             if (token != null)
             {
-                context.DeserializeTicket(token.RefreshToken);
-                //var result = await _refreshTokenService.Remove(context.Token);
+                context.DeserializeTicket(token.AccessToken);
+                //var result = await _clientAuthorizationService.Remove(context.Token);
             }
             /*
-               string token = context.Token;
-               string value;
-               if (_authenticationCodes.TryRemove(context.Token, out value))
-               {
-                   context.DeserializeTicket(value);
-               }
-               */
+            string token = context.Token;
+            string value;
+            if (_authenticationCodes.TryRemove(context.Token, out value))
+            {
+                context.DeserializeTicket(value);
+            }
+            */
         }
     }
 }

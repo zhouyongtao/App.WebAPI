@@ -100,10 +100,10 @@ namespace Abp.App.Repositories.Impl
         /// <returns></returns>
         public async Task<Token> GetTokenAsync(string token)
         {
-            const string cmdText = @"SELECT *FROM Tokens WHERE ";
+            const string cmdText = @"SELECT *FROM tokens WHERE refreshToken=@refreshToken ";
             try
             {
-                return await new SqlConnection(DbSetting.App).QueryAsync<Token>(cmdText, new { token = token }).ContinueWith(t => t.Result.FirstOrDefault());
+                return await new SqlConnection(DbSetting.App).QueryAsync<Token>(cmdText, new { refreshToken = token }).ContinueWith(t => t.Result.FirstOrDefault());
             }
             catch (Exception ex)
             {

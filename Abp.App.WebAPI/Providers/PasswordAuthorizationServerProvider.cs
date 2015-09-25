@@ -106,20 +106,24 @@ namespace Abp.App.WebAPI.Providers
                 context.Rejected();
                 return base.GrantRefreshToken(context);
             }
-            var originalClient = context.Ticket.Properties.Dictionary["as:client_id"];
             var currentClient = context.OwinContext.Get<string>("as:client_id");
-            // enforce client binding of refresh token
-            if (originalClient != currentClient)
-            {
-                context.Rejected();
-                return base.GrantRefreshToken(context);
-            }
+            /*
+              var originalClient = context.Ticket.Properties.Dictionary["as:client_id"];
+              // enforce client binding of refresh token
+              if (originalClient != currentClient)
+              {
+                  context.Rejected();
+                  return base.GrantRefreshToken(context);
+              }
+              */
             // chance to change authentication ticket for refresh token requests
             var claimsIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
             var props = new AuthenticationProperties(new Dictionary<string, string>
-                {
-                    { "as:client_id", context.ClientId }
-                });
+                        {
+                            { "as:client_id", context.ClientId }
+                        });
+            context.OwinContext.Set<string>("as:client_id", currentClient);
+            context.OwinContext.Set<string>("as:refresh_token_time", "36000");
             var newTicket = new AuthenticationTicket(claimsIdentity, props);
             context.Validated(newTicket);
             return base.GrantRefreshToken(context);
