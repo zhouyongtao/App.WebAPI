@@ -54,7 +54,7 @@ namespace Abp.App.WebAPI.Providers
             }
             //need to make the client_id available for later security checks
             context.OwinContext.Set<string>("as:client_id", clientId);
-            //context.OwinContext.Set<string>("as:clientRefreshTokenLifeTime", _clientAuthorizationProviderService.RefreshTokenLifeTime.ToString());
+            context.OwinContext.Set<string>("as:refresh_token_time", "36000");
             context.Validated(clientId);
         }
 

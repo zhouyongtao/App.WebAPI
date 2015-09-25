@@ -43,26 +43,24 @@ namespace Abp.App.WebAPI.Providers
             if (string.IsNullOrEmpty(context.Ticket.Identity.Name)) return;
             var clietId = context.OwinContext.Get<string>("as:client_id");
             if (string.IsNullOrEmpty(clietId)) return;
-            var refreshTokenLifeTime = context.OwinContext.Get<string>("as:clientRefreshTokenLifeTime");
-            //if (string.IsNullOrEmpty(refreshTokenLifeTime)) return;
-
-            string ip = context.Request.RemoteIpAddress;
-            int? port = context.Request.RemotePort;
+            var refresh_token_time = context.OwinContext.Get<string>("as:refresh_token_time");
+            if (string.IsNullOrEmpty(refresh_token_time)) return;
+            string IpAddress = context.Request.RemoteIpAddress + ":" + context.Request.RemotePort;
             var token = new Token()
             {
                 ClientId = clietId,
                 UserName = context.Ticket.Identity.Name,
                 IssuedUtc = DateTime.UtcNow,
-                ExpiresUtc = DateTime.UtcNow.AddSeconds(Convert.ToDouble(refreshTokenLifeTime)),
+                ExpiresUtc = DateTime.UtcNow.AddSeconds(Convert.ToDouble(refresh_token_time)),
+                IpAddress = IpAddress
             };
             context.Ticket.Properties.IssuedUtc = token.IssuedUtc;
             context.Ticket.Properties.ExpiresUtc = token.ExpiresUtc;
-            token.Access_token = context.SerializeTicket();
-            token.Refresh_token = await _clientAuthorizationService.GenerateOAuthClientSecretAsync();
-            //token.Refresh_token = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+            token.AccessToken = context.SerializeTicket();
+            token.RefreshToken = await _clientAuthorizationService.GenerateOAuthClientSecretAsync();
             if (await _clientAuthorizationService.SaveTokenAsync(token))
             {
-                context.SetToken(token.Refresh_token);
+                context.SetToken(token.RefreshToken);
             }
             /*
             // maybe only create a handle the first time, then re-use for same client
@@ -85,15 +83,22 @@ namespace Abp.App.WebAPI.Providers
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task ReceiveAsync(AuthenticationTokenReceiveContext context)
+        public override async Task ReceiveAsync(AuthenticationTokenReceiveContext context)
         {
-            string token = context.Token;
-            string value;
-            if (_authenticationCodes.TryRemove(context.Token, out value))
+            var token = await _clientAuthorizationService.GetTokenAsync(context.Token);
+            if (token != null)
             {
-                context.DeserializeTicket(value);
+                context.DeserializeTicket(token.RefreshToken);
+                //var result = await _refreshTokenService.Remove(context.Token);
             }
-            return base.ReceiveAsync(context);
+            /*
+               string token = context.Token;
+               string value;
+               if (_authenticationCodes.TryRemove(context.Token, out value))
+               {
+                   context.DeserializeTicket(value);
+               }
+               */
         }
     }
 }

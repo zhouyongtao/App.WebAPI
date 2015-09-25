@@ -32,6 +32,17 @@ namespace Abp.App.Repositories.Impl
                 cryptoRandomDataGenerator.GetBytes(buffer);
                 return Convert.ToBase64String(buffer).TrimEnd('=').Replace('+', '-').Replace('/', '_');
             });
+
+            /*
+              https://msdn.microsoft.com/zh-cn/library/system.security.cryptography.rngcryptoserviceprovider.aspx
+              http://bitoftech.net/2014/12/15/secure-asp-net-web-api-using-api-key-authentication-hmac-authentication/
+              using (var cryptoProvider = new RNGCryptoServiceProvider())
+              {
+                  byte[] secretKeyByteArray = new byte[32]; //256 bit
+                  cryptoProvider.GetBytes(secretKeyByteArray);
+                  var APIKey = Convert.ToBase64String(secretKeyByteArray);
+              }
+            */
         }
 
         /// <summary>
@@ -60,25 +71,43 @@ namespace Abp.App.Repositories.Impl
         /// <returns></returns>
         public async Task<bool> SaveTokenAsync(Token token)
         {
-            const string cmdText = @"INSERT INTO Tokens(access_token,token_type, expires_in ,refresh_token ,userName, clientId ,issuedUtc ,expiresUtc) VALUES(@access_token,@token_type, @expires_in ,@refresh_token ,@userName, @clientId ,@issuedUtc ,@expiresUtc)";
+            const string cmdText = @"INSERT INTO Tokens(clientId,userName,accessToken ,refreshToken,issuedUtc ,expiresUtc,IpAddress) VALUES(@clientId,@userName,@accessToken ,@refreshToken,@issuedUtc ,@expiresUtc,@IpAddress)";
             try
             {
-                // var data = await new SqlConnection(DbSetting.App).InsertAsync(token);
+                // return await new SqlConnection(DbSetting.App).InsertAsync(token) != 0;
                 return await new SqlConnection(DbSetting.App).ExecuteAsync(cmdText, new
                 {
-                    access_token = token.Access_token,
-                    token_type = token.Token_type,
-                    expires_in = token.Expires_in,
-                    refresh_token = token.Refresh_token,
-                    userName = token.UserName,
                     clientId = token.ClientId,
+                    userName = token.UserName,
+                    accessToken = token.AccessToken,
+                    refreshToken = token.RefreshToken,
                     issuedUtc = token.IssuedUtc,
-                    expiresUtc = token.ExpiresUtc
+                    expiresUtc = token.ExpiresUtc,
+                    IpAddress = token.IpAddress
+
                 }) != 0;
             }
             catch (Exception ex)
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// 获得Token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<Token> GetTokenAsync(string token)
+        {
+            const string cmdText = @"SELECT *FROM Tokens WHERE ";
+            try
+            {
+                return await new SqlConnection(DbSetting.App).QueryAsync<Token>(cmdText, new { token = token }).ContinueWith(t => t.Result.FirstOrDefault());
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
     }

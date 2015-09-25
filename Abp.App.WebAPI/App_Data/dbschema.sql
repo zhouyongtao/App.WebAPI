@@ -16,3 +16,15 @@ CREATE TABLE [dbo].[users] (
     [age]      INT           NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+CREATE TABLE [dbo].[tokens] (
+    [Id]           INT           IDENTITY (1, 1) NOT NULL,
+    [clientId]     VARCHAR (200) NULL,
+    [userName]     VARCHAR (100) NULL,
+    [accessToken]  VARCHAR (300) NULL,
+    [refreshToken] VARCHAR (300) NULL,
+    [issuedUtc]    DATETIME      NULL,
+    [expiresUtc]   DATETIME      NULL,
+    [ipAddress]    VARCHAR (50)  NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);

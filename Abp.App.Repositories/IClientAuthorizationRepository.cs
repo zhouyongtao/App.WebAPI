@@ -29,5 +29,13 @@ namespace Abp.App.Repositories
         /// <param name="token">票据</param>
         /// <returns></returns>
         Task<bool> SaveTokenAsync(Token token);
+
+        /// <summary>
+        /// 获得Token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        Task<Token> GetTokenAsync(string token);
+
     }
 }

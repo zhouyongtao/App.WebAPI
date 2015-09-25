@@ -55,5 +55,15 @@ namespace Abp.App.Services.Impl
         {
             return await _clientAuthorizationRepository.SaveTokenAsync(token);
         }
+
+        /// <summary>
+        /// 获得Token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<Token> GetTokenAsync(string token)
+        {
+            return await _clientAuthorizationRepository.GetTokenAsync(token);
+        }
     }
 }
