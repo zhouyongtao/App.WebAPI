@@ -110,5 +110,23 @@ namespace Abp.App.Repositories.Impl
                 return null;
             }
         }
+
+        /// <summary>
+        /// 删除Token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<bool> RemoveTokenAsync(string token)
+        {
+            const string cmdText = @"DELETE FROM tokens WHERE refreshToken=@refreshToken ";
+            try
+            {
+                return await new SqlConnection(DbSetting.App).ExecuteAsync(cmdText, new { refreshToken = token }) != 0;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

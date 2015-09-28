@@ -86,10 +86,10 @@ namespace Abp.App.WebAPI.Providers
         public override async Task ReceiveAsync(AuthenticationTokenReceiveContext context)
         {
             var token = await _clientAuthorizationService.GetTokenAsync(context.Token);
-            if (token != null)
+            if (token.IsNotNull() && token.AccessToken.IsNotNullOrEmpty())
             {
+                await _clientAuthorizationService.RemoveTokenAsync(context.Token);
                 context.DeserializeTicket(token.AccessToken);
-                //var result = await _clientAuthorizationService.Remove(context.Token);
             }
             /*
             string token = context.Token;

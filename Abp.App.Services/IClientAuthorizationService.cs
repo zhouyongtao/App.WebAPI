@@ -36,5 +36,12 @@ namespace Abp.App.Services
         /// <param name="token"></param>
         /// <returns></returns>
         Task<Token> GetTokenAsync(string token);
+
+        /// <summary>
+        /// 删除Token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        Task<bool> RemoveTokenAsync(string token);
     }
 }

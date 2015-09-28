@@ -6,6 +6,7 @@
     [client_description] NCHAR(10) NULL, 
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
 CREATE TABLE [dbo].[users] (
     [Id]       INT           IDENTITY (1, 1) NOT NULL,
     [username] VARCHAR (100) NOT NULL,

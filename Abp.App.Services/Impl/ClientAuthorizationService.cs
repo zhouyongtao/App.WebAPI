@@ -65,5 +65,15 @@ namespace Abp.App.Services.Impl
         {
             return await _clientAuthorizationRepository.GetTokenAsync(token);
         }
+
+        /// <summary>
+        /// 删除Token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<bool> RemoveTokenAsync(string token)
+        {
+            return await _clientAuthorizationRepository.RemoveTokenAsync(token);
+        }
     }
 }
