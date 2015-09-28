@@ -23,14 +23,20 @@ namespace Abp.App.Repositories.Impl
             //！！！ http://stackoverflow.com/questions/23652166/how-to-generate-oauth-2-client-id-and-secret
             return await Task.Run(() =>
             {
-                var cryptoRandomDataGenerator = new RNGCryptoServiceProvider();
-                byte[] buffer = Guid.NewGuid().ToByteArray();
+                //byte[] salt = Guid.NewGuid().ToByteArray();
+                var salt = new byte[32];
                 if (client_id.IsNotNullOrEmpty())
                 {
-                    buffer = client_id.ToByteArray();
+                    salt = client_id.ToByteArray();
                 }
-                cryptoRandomDataGenerator.GetBytes(buffer);
-                return Convert.ToBase64String(buffer).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+                //System.Security.Cryptography.Rfc2898DeriveBytes
+                using (var provider = new RNGCryptoServiceProvider())
+                {
+                    // generated salt
+                    provider.GetBytes(salt);
+                }
+
+                return Convert.ToBase64String(salt).TrimEnd('=').Replace('+', '-').Replace('/', '_');
             });
 
             /*
