@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Owin.Security.Infrastructure;
-using System.Collections.Concurrent;
 using Abp.App.Services;
 using Apb.App.Entities.Client;
 
@@ -16,7 +15,7 @@ namespace Abp.App.WebAPI.Providers
     public class AccessTokenAuthorizationServerProvider : AuthenticationTokenProvider
     {
         /// <summary>
-        /// Password Grant 授权服务
+        /// 授权服务
         /// </summary>
         private readonly IClientAuthorizationService _clientAuthorizationService;
 

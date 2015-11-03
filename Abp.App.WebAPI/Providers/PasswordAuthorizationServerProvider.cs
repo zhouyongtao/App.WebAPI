@@ -14,19 +14,19 @@ namespace Abp.App.WebAPI.Providers
     public class PasswordAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
         /// <summary>
-        /// Password Grant 授权服务
+        /// 授权服务
         /// </summary>
         private readonly IClientAuthorizationService _clientAuthorizationService;
 
         /// <summary>
-        ///账户服务
+        /// 账户服务
         /// </summary>
         private readonly IAccountService _accountService;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        /// <param name="clientAuthorizationService">Password Grant 授权服务</param>
+        /// <param name="clientAuthorizationService">授权服务</param>
         /// <param name="accountService">用户服务</param>
         public PasswordAuthorizationServerProvider(IClientAuthorizationService clientAuthorizationService, IAccountService accountService)
         {

@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac.Integration.WebApi;
 using Microsoft.Owin;
+using Microsoft.Owin.Infrastructure;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
@@ -27,7 +28,7 @@ namespace Abp.App.WebAPI.App_Start
                 TokenEndpointPath = new PathString("/token"),
                 Provider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<ClientAuthorizationServerProvider>(),
                 AccessTokenProvider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<AccessTokenAuthorizationServerProvider>(),
-                AccessTokenExpireTimeSpan = TimeSpan.FromSeconds(30),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(1),
                 AuthenticationMode = AuthenticationMode.Active,
                 //HTTPS is allowed only AllowInsecureHttp = false
 #if DEBUG
@@ -35,7 +36,6 @@ namespace Abp.App.WebAPI.App_Start
 #endif
                 ApplicationCanDisplayErrors = true,
             });
-            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
             /*
                //PasswordAuthorizationServerProvider
@@ -58,6 +58,8 @@ namespace Abp.App.WebAPI.App_Start
    #endif
                });
                */
+            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+            //app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
         }
     }
 }

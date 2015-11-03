@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin.Security;
+﻿using Abp.App.Services;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,13 @@ using System.Threading.Tasks;
 namespace Abp.App.WebAPI.Providers
 {
     /*
-      1.增加额外字段
-      2.增加scope授权权限
-      3.持久化Token
-      4.刷新Token后失效老的Token
-      5.重启IIS池Token失效【自定义验证】
+      0.DI Autofac dependency injection in implementation of OAuthAuthorizationServerProvider http://stackoverflow.com/questions/25871392/autofac-dependency-injection-in-implementation-of-oauthauthorizationserverprovid
+      1.启用TryGetBasicCredentials认证 validate client credentials should be stored securely (salted, hashed, iterated)，参考PDF设计
+      2.增加额外字段
+      3.增加scope授权权限
+      4.持久化Token
+      5.刷新Token后失效老的Token
+      6.自定义验证【重启IIS池Token失效,验证权限】
     */
 
     /// <summary>
@@ -20,13 +23,26 @@ namespace Abp.App.WebAPI.Providers
     /// </summary>
     public class ClientAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
-        /*
-         private OAuth2ClientService _oauthClientService;
-         public ClientAuthorizationServerProvider()
-         {
-             this.OAuth2ClientService = new OAuth2ClientService();
-         }
-        */
+        /// <summary>
+        /// 授权服务
+        /// </summary>
+        private readonly IClientAuthorizationService _clientAuthorizationService;
+
+        /// <summary>
+        /// 账户服务
+        /// </summary>
+        private readonly IAccountService _accountService;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="clientAuthorizationService">授权服务</param>
+        /// <param name="accountService">用户服务</param>
+        public ClientAuthorizationServerProvider(IClientAuthorizationService clientAuthorizationService, IAccountService accountService)
+        {
+            _clientAuthorizationService = clientAuthorizationService;
+            _accountService = accountService;
+        }
 
         /// <summary>
         /// 验证Client Credentials[client_id与client_secret]
@@ -43,6 +59,9 @@ namespace Abp.App.WebAPI.Providers
             client_secret  分配的调用oaut的应用端Secret
             scope 	       授权权限。以空格分隔的权限列表，若不传递此参数，代表请求用户的默认权限
             */
+
+            //based authentication context.TryGetBasicCredentials
+
             string client_id;
             string client_secret;
             context.TryGetFormCredentials(out client_id, out client_secret);
@@ -79,6 +98,7 @@ namespace Abp.App.WebAPI.Providers
             }
             //默认权限
             var claimsIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
+            //!!!
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, context.ClientId));
             var props = new AuthenticationProperties(new Dictionary<string, string> {
                             {
