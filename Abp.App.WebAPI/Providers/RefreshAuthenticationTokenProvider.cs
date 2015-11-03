@@ -13,7 +13,7 @@ using System.Web;
 namespace Abp.App.WebAPI.Providers
 {
     /// <summary>
-    /// 刷新Token
+    /// 刷新Token [http://stackoverflow.com/questions/20637674/owin-security-how-to-implement-oauth2-refresh-tokens]
     /// </summary>
     public class RefreshAuthenticationTokenProvider : AuthenticationTokenProvider
     {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Abp.App.WebAPI.Providers
 {
     /// <summary>
-    /// Resource Owner Password Credentials Grant 授权
+    /// Resource Owner Password Credentials Grant 授权 [http://stackoverflow.com/questions/26357054/return-more-info-to-the-client-using-oauth-bearer-tokens-generation-and-owin-in]
     /// </summary>
     public class PasswordAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {

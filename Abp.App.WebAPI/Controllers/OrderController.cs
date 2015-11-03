@@ -17,7 +17,7 @@ namespace Abp.App.WebAPI.Controllers
         /// <returns></returns>
         [Authorize]
         [Route("{id:int}")]
-        public async Task<IHttpActionResult> GetOrderAsync(string id)
+        public async Task<IHttpActionResult> GetOrderAsync(int? id)
         {
             string username = User.Identity.Name;
             return Ok(new { IsError = true, Msg = username, Data = string.Empty });

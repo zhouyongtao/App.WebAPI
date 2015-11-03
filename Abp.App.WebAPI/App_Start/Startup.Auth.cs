@@ -19,39 +19,44 @@ namespace Abp.App.WebAPI.App_Start
         /// <param name="app"></param>
         public void ConfigureAuth(IAppBuilder app)
         {
-            /*
-              //测试
-              app.UseOAuthAuthorizationServer(new OAuthAuthorizationServerOptions
-             {
-                 TokenEndpointPath = new PathString("/token"),
-                 Provider = new ClientApplicationOAuthProvider(),
-                 AccessTokenExpireTimeSpan = TimeSpan.FromHours(2),
-                 AuthenticationMode = AuthenticationMode.Active,
-                 //HTTPS is allowed only AllowInsecureHttp = false
-                 AllowInsecureHttp = true
-                 //ApplicationCanDisplayErrors = false
-             });
-             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
-             */
-
-            app.UseOAuthBearerTokens(new OAuthAuthorizationServerOptions
+            /*    */
+            //测试 ClientApplicationOAuthProvider
+            app.UseOAuthAuthorizationServer(new OAuthAuthorizationServerOptions
             {
-                //!!!
-                // AccessTokenProvider=
+                //AuthorizeEndpointPath = new PathString("/authorize")
                 TokenEndpointPath = new PathString("/token"),
-                //Provider = new ClientApplicationOAuthProvider(),
-                //Provider = new PasswordAuthorizationServerProvider(),
-                //Provider = DependencyInjectionConfig.container.Resolve<PasswordAuthorizationServerProvider>(),
-                //Provider = DependencyResolver.Current.GetService<PasswordAuthorizationServerProvider>(),
-                Provider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<PasswordAuthorizationServerProvider>(),
-                RefreshTokenProvider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<RefreshAuthenticationTokenProvider>(),
+                Provider = new ClientAuthorizationServerProvider(),
                 AccessTokenExpireTimeSpan = TimeSpan.FromHours(2),
                 AuthenticationMode = AuthenticationMode.Active,
                 //HTTPS is allowed only AllowInsecureHttp = false
 #if DEBUG
                 AllowInsecureHttp = true,
 #endif
+                ApplicationCanDisplayErrors = true,
             });
+            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+
+            /*
+               //PasswordAuthorizationServerProvider
+               app.UseOAuthBearerTokens(new OAuthAuthorizationServerOptions
+               {
+                   //!!!
+                   // AccessTokenProvider=
+                   TokenEndpointPath = new PathString("/token"),
+                   //Provider = new ClientApplicationOAuthProvider(),
+                   //Provider = new PasswordAuthorizationServerProvider(),
+                   //Provider = DependencyInjectionConfig.container.Resolve<PasswordAuthorizationServerProvider>(),
+                   //Provider = DependencyResolver.Current.GetService<PasswordAuthorizationServerProvider>(),
+                   Provider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<PasswordAuthorizationServerProvider>(),
+                   RefreshTokenProvider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<RefreshAuthenticationTokenProvider>(),
+                   AccessTokenExpireTimeSpan = TimeSpan.FromHours(2),
+                   AuthenticationMode = AuthenticationMode.Active,
+                   //HTTPS is allowed only AllowInsecureHttp = false
+   #if DEBUG
+                   AllowInsecureHttp = true,
+   #endif
+               });
+               */
         }
     }
 }
