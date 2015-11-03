@@ -20,13 +20,14 @@ namespace Abp.App.WebAPI.App_Start
         public void ConfigureAuth(IAppBuilder app)
         {
             /*    */
-            //测试 ClientApplicationOAuthProvider
+            //ClientApplicationOAuthProvider
             app.UseOAuthAuthorizationServer(new OAuthAuthorizationServerOptions
             {
                 //AuthorizeEndpointPath = new PathString("/authorize")
                 TokenEndpointPath = new PathString("/token"),
-                Provider = new ClientAuthorizationServerProvider(),
-                AccessTokenExpireTimeSpan = TimeSpan.FromHours(2),
+                Provider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<ClientAuthorizationServerProvider>(),
+                AccessTokenProvider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<AccessTokenAuthorizationServerProvider>(),
+                AccessTokenExpireTimeSpan = TimeSpan.FromSeconds(30),
                 AuthenticationMode = AuthenticationMode.Active,
                 //HTTPS is allowed only AllowInsecureHttp = false
 #if DEBUG

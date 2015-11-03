@@ -32,6 +32,9 @@ namespace Abp.App.WebAPI.App_Start
             //注册 Password Grant 授权服务
             builder.RegisterType<PasswordAuthorizationServerProvider>().AsSelf().SingleInstance();
             builder.RegisterType<RefreshAuthenticationTokenProvider>().AsSelf().SingleInstance();
+            //注册  Credential Grant Password 
+            builder.RegisterType<ClientAuthorizationServerProvider>().AsSelf().SingleInstance();
+            builder.RegisterType<AccessTokenAuthorizationServerProvider>().AsSelf().SingleInstance();
             //在Autofac中注册Redis的连接，并设置为Singleton (官方建議保留Connection，重複使用)
             //builder.Register(r =>{ return ConnectionMultiplexer.Connect(DBSetting.Redis);}).AsSelf().SingleInstance();
             var container = builder.Build();

@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 namespace Abp.App.WebAPI.Providers
 {
+    /*
+      1.增加额外字段
+      2.增加scope授权权限
+      3.持久化Token
+      4.刷新Token后失效老的Token
+      5.重启IIS池Token失效【自定义验证】
+    */
+
     /// <summary>
     /// Client Credentials 授权
     /// </summary>
@@ -74,13 +82,10 @@ namespace Abp.App.WebAPI.Providers
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, context.ClientId));
             var props = new AuthenticationProperties(new Dictionary<string, string> {
                             {
-                                "name", "irving"
+                                "client_id",context.ClientId
                             },
                             {
-                                "age", "25"
-                            },
-                            {
-                            "gender", "male"
+                                "scope",string.Join(" ",context.Scope)
                             }
                         });
             var ticket = new AuthenticationTicket(claimsIdentity, props);

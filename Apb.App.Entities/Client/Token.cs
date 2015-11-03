@@ -13,9 +13,11 @@ namespace Apb.App.Entities.Client
     [Table("tokens")]
     public class Token
     {
-       // [Key]
+        // [Key]
         public int Id { get; set; }
         public string ClientId { get; set; }
+        public string ClientType { get; set; }
+        public string Scope { get; set; }
         public string UserName { get; set; }
         // [JsonProperty("access_token")]
         public string AccessToken { get; set; }
