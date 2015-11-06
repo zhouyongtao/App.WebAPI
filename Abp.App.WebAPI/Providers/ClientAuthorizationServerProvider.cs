@@ -1,4 +1,5 @@
-﻿using Abp.App.Services;
+﻿using Abp.App.Core;
+using Abp.App.Services;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using System;
@@ -49,7 +50,7 @@ namespace Abp.App.WebAPI.Providers
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
+        public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
             //http://localhost:48339/token
             //grant_type=client_credentials&client_id=irving&client_secret=123456&scope=user order
@@ -59,24 +60,24 @@ namespace Abp.App.WebAPI.Providers
             client_secret  分配的调用oaut的应用端Secret
             scope 	       授权权限。以空格分隔的权限列表，若不传递此参数，代表请求用户的默认权限
             */
-
-            //based authentication context.TryGetBasicCredentials
-
-            string client_id;
-            string client_secret;
-            context.TryGetFormCredentials(out client_id, out client_secret);
+            //validate client credentials should be stored securely (salted, hashed, iterated)
+            string clientId;
+            string clientSecret;
+            //context.TryGetBasicCredentials(out clientId, out clientSecret);
+            context.TryGetFormCredentials(out clientId, out clientSecret);
             //验证用户名密码
-            if (client_id.Equals("irving", StringComparison.OrdinalIgnoreCase) && client_secret.Equals("123456", StringComparison.OrdinalIgnoreCase))
-            {
-                context.Validated(context.ClientId);
-            }
-            else
+            var clientValid = await _clientAuthorizationService.ValidateClientAuthorizationSecretAsync(clientId, clientSecret);
+            if (!clientValid)
             {
                 //Flurl 404 问题
                 //context.Response.StatusCode = Convert.ToInt32(HttpStatusCode.OK);
-                context.SetError("invalid_client", "client is not valid");
+                //context.Rejected();
+                context.SetError(AbpConstants.InvalidClient, AbpConstants.InvalidClientErrorDescription);
+                return;
             }
-            return base.ValidateClientAuthentication(context);
+            //need to make the client_id available for later security checks
+            context.OwinContext.Set<string>("as:client_id", clientId);
+            context.Validated(clientId);
         }
 
         /// <summary>

@@ -7,11 +7,14 @@ using Microsoft.Owin.Security.Infrastructure;
 using Abp.App.Services;
 using Apb.App.Entities.Client;
 using Microsoft.Owin.Security.OAuth;
+using System.Web.Http.Filters;
+using Microsoft.Owin.Security;
+using System.Security.Claims;
 
 namespace Abp.App.WebAPI.Providers
 {
     /// <summary>
-    /// 生成Token
+    /// 生成与验证Token
     /// </summary>
     public class AccessTokenAuthorizationServerProvider : AuthenticationTokenProvider
     {
@@ -50,14 +53,12 @@ namespace Abp.App.WebAPI.Providers
             };
             token.AccessToken = context.SerializeTicket();
             token.RefreshToken = string.Empty;//await _clientAuthorizationService.GenerateOAuthClientSecretAsync();
-            //删除老的Token
-            //保存新的Token
+            //Token没有过期的情况强行刷新，删除老的Token保存新的Token
             if (await _clientAuthorizationService.SaveTokenAsync(token))
             {
                 context.SetToken(token.AccessToken);
             }
         }
-
 
         //<summary>
         //验证Token
@@ -67,12 +68,21 @@ namespace Abp.App.WebAPI.Providers
         public override async Task ReceiveAsync(AuthenticationTokenReceiveContext context)
         {
             var request = new OAuthRequestTokenContext(context.OwinContext, context.Token);
+            var ticket = new AuthenticationTicket(new ClaimsIdentity(), new AuthenticationProperties()
+            {
+                IssuedUtc = DateTime.UtcNow.AddYears(-1),
+                ExpiresUtc = DateTime.UtcNow.AddYears(-1)
+            });
             if (request == null || request.Token.IsNullOrEmpty())
             {
-                return;
+                context.SetTicket(ticket);
             }
-            context.DeserializeTicket(context.Token);
-            //验证最新的Token
+            //验证Token是否过期
+            var vaild = true;//await _clientAuthorizationService.VaildOAuthClientSecretAsync();
+            if (vaild)
+            {
+                context.SetTicket(ticket);
+            }
         }
     }
 }
