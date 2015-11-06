@@ -20,9 +20,25 @@ namespace Abp.App.WebAPI.App_Start
         /// <param name="app"></param>
         public void ConfigureAuth(IAppBuilder app)
         {
-            /*    */
-            //ClientApplicationOAuthProvider
+            /*   
             app.UseOAuthAuthorizationServer(new OAuthAuthorizationServerOptions
+            {
+                //AuthorizeEndpointPath = new PathString("/authorize")
+                TokenEndpointPath = new PathString("/token"),
+                Provider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<ClientAuthorizationServerProvider>(),
+                AccessTokenProvider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<AccessTokenAuthorizationServerProvider>(),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(1),
+                AuthenticationMode = AuthenticationMode.Active,
+                //HTTPS is allowed only AllowInsecureHttp = false
+#if DEBUG
+                AllowInsecureHttp = true,
+#endif
+                ApplicationCanDisplayErrors = true,
+            });
+             */
+
+            //ClientApplicationOAuthProvider
+            app.UseOAuthBearerTokens(new OAuthAuthorizationServerOptions
             {
                 //AuthorizeEndpointPath = new PathString("/authorize")
                 TokenEndpointPath = new PathString("/token"),
@@ -58,8 +74,9 @@ namespace Abp.App.WebAPI.App_Start
    #endif
                });
                */
-            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+
             //app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+            //app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
         }
     }
 }
