@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abp.App.Services", "Abp.App
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apb.App.Entities", "Apb.App.Entities\Apb.App.Entities.csproj", "{A2AECC41-91ED-4DA0-B74E-A17C2A534395}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abp.App.TestWebAPI", "Abp.App.TestWebAPI\Abp.App.TestWebAPI.csproj", "{A8BDB461-17E9-4EAC-995A-A7B82428A70F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abp.App.TestMvc", "Abp.App.TestMvc\Abp.App.TestMvc.csproj", "{6D0F3F7D-E701-4709-BBFE-23575939EF73}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,11 +63,21 @@ Global
 		{A2AECC41-91ED-4DA0-B74E-A17C2A534395}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2AECC41-91ED-4DA0-B74E-A17C2A534395}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2AECC41-91ED-4DA0-B74E-A17C2A534395}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8BDB461-17E9-4EAC-995A-A7B82428A70F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8BDB461-17E9-4EAC-995A-A7B82428A70F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8BDB461-17E9-4EAC-995A-A7B82428A70F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8BDB461-17E9-4EAC-995A-A7B82428A70F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D0F3F7D-E701-4709-BBFE-23575939EF73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D0F3F7D-E701-4709-BBFE-23575939EF73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D0F3F7D-E701-4709-BBFE-23575939EF73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D0F3F7D-E701-4709-BBFE-23575939EF73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FD07BF80-8220-46AB-84E1-BE35A39BAB56} = {D80B3B03-48C7-4F97-8BB0-86D182C2BD95}
+		{A8BDB461-17E9-4EAC-995A-A7B82428A70F} = {D80B3B03-48C7-4F97-8BB0-86D182C2BD95}
+		{6D0F3F7D-E701-4709-BBFE-23575939EF73} = {D80B3B03-48C7-4F97-8BB0-86D182C2BD95}
 	EndGlobalSection
 EndGlobal

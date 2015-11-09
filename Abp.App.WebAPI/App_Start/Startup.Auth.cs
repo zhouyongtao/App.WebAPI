@@ -4,9 +4,11 @@ using Autofac.Integration.WebApi;
 using Microsoft.Owin;
 using Microsoft.Owin.Infrastructure;
 using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Infrastructure;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 using System;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Mvc;
 
@@ -20,38 +22,86 @@ namespace Abp.App.WebAPI.App_Start
         /// <param name="app"></param>
         public void ConfigureAuth(IAppBuilder app)
         {
-            /*   
-            app.UseOAuthAuthorizationServer(new OAuthAuthorizationServerOptions
+            app.UseOAuthAuthorizationServer(new OAuthAuthorizationServerOptions()
             {
-                //AuthorizeEndpointPath = new PathString("/authorize")
+                AuthorizeEndpointPath = new PathString("/authorize"),
                 TokenEndpointPath = new PathString("/token"),
-                Provider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<ClientAuthorizationServerProvider>(),
-                AccessTokenProvider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<AccessTokenAuthorizationServerProvider>(),
+                AuthenticationMode = AuthenticationMode.Passive,
                 AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(1),
-                AuthenticationMode = AuthenticationMode.Active,
                 //HTTPS is allowed only AllowInsecureHttp = false
 #if DEBUG
                 AllowInsecureHttp = true,
 #endif
                 ApplicationCanDisplayErrors = true,
-            });
-             */
+                // AccessTokenProvider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<AccessTokenAuthorizationServerProvider>(),
+                // Provider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<ClientAuthorizationServerProvider>(),
+                Provider = new OAuthAuthorizationServerProvider()
+                {
+                    OnValidateClientRedirectUri = context =>
+                    {
+                        context.Validated();
+                        return Task.FromResult(0);
+                    },
+                    OnValidateClientAuthentication = context =>
+                    {
+                        string clientId;
+                        string clientSecret;
+                        if (context.TryGetBasicCredentials(out clientId, out clientSecret) || context.TryGetFormCredentials(out clientId, out clientSecret)) context.Validated();
+                        return Task.FromResult(0);
+                    }
+                },
+                AuthorizationCodeProvider = new AuthenticationTokenProvider()
+                {
+                    OnCreate = context =>
+                    {
+                        context.SetToken(DateTime.Now.Ticks.ToString());
+                        string token = context.Token;
+                        string ticket = context.SerializeTicket();
+                        // _authenticationCodes[token] = ticket;
+                    },
+                    OnReceive = context =>
+                    {
+                        string token = context.Token;
+                        string ticket;
+                        //if (_authenticationCodes.TryRemove(token, out ticket))
+                        //{
+                        //    context.DeserializeTicket(ticket);
+                        //}
+                    },
+                },
+                RefreshTokenProvider = new AuthenticationTokenProvider()
+                {
+                    OnCreate = context =>
+                    {
+                        context.SetToken(context.SerializeTicket());
+                    },
 
-            //ClientApplicationOAuthProvider
-            app.UseOAuthBearerTokens(new OAuthAuthorizationServerOptions
-            {
-                //AuthorizeEndpointPath = new PathString("/authorize")
-                TokenEndpointPath = new PathString("/token"),
-                Provider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<ClientAuthorizationServerProvider>(),
-                AccessTokenProvider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<AccessTokenAuthorizationServerProvider>(),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(1),
-                AuthenticationMode = AuthenticationMode.Active,
-                //HTTPS is allowed only AllowInsecureHttp = false
-#if DEBUG
-                AllowInsecureHttp = true,
-#endif
-                ApplicationCanDisplayErrors = true,
+                    OnReceive = context =>
+                    {
+                        context.DeserializeTicket(context.Token);
+                    },
+                }
             });
+
+            /*
+                  //ClientApplicationOAuthProvider
+                  app.UseOAuthBearerTokens(new OAuthAuthorizationServerOptions
+                  {
+                      //AuthorizeEndpointPath = new PathString("/authorize")
+                      TokenEndpointPath = new PathString("/token"),
+                      Provider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<ClientAuthorizationServerProvider>(),
+                      AccessTokenProvider = GlobalConfiguration.Configuration.DependencyResolver.GetRootLifetimeScope().Resolve<AccessTokenAuthorizationServerProvider>(),
+                      AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(1),
+                      AuthenticationMode = AuthenticationMode.Active,
+                      //HTTPS is allowed only AllowInsecureHttp = false
+      #if DEBUG
+                      AllowInsecureHttp = true,
+      #endif
+                      ApplicationCanDisplayErrors = true,
+                  });
+
+                  */
+
 
             /*
                //PasswordAuthorizationServerProvider
@@ -76,7 +126,6 @@ namespace Abp.App.WebAPI.App_Start
                */
 
             //app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
-            //app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
         }
     }
 }
